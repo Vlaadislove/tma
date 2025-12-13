@@ -1,0 +1,84 @@
+model Terminal {
+  id        String   @id @default(cuid())
+  name      String
+  code      String   @unique // прошивка/код терминала, например TMA-001
+  location  String?
+  cells     Cell[]
+  commands  Command[]
+  createdAt DateTime @default(now())
+}
+
+model Cell {
+  id            String     @id @default(cuid())
+  terminalId    String
+  terminal      Terminal   @relation(fields: [terminalId], references: [id])
+  index         Int 
+  gpioPin       Int
+  label         String?
+  isActive      Boolean    @default(true)
+  status        CellStatus @default(FREE)
+  currentRentId String?    @unique
+  currentRent   Rent?      @relation("CellCurrentRent", fields: [currentRentId], references: [id])
+  rents         Rent[]     @relation("CellRents")
+  itemId        String?    @unique
+  item          Item?      @relation("CellItem", fields: [itemId], references: [id])
+  commands      Command[]
+  createdAt     DateTime   @default(now())
+
+  @@unique([terminalId, index])
+}
+
+enum CellStatus {
+  FREE
+  OCCUPIED
+  DISABLED
+}
+
+model Item {
+  id        String   @id @default(cuid())
+  name      String
+  sku       String?
+  createdAt DateTime @default(now())
+  cell      Cell?     @relation("CellItem")
+  rents     Rent[]
+}
+
+model Rent {
+  id             String     @id @default(cuid())
+  cellId         String
+  cell           Cell       @relation("CellRents", fields: [cellId], references: [id])
+  currentForCell Cell?      @relation("CellCurrentRent")
+  itemId         String?
+  item           Item?      @relation(fields: [itemId], references: [id])
+  userId         String?
+  status         RentStatus @default(ACTIVE)
+  startedAt      DateTime   @default(now())
+  finishedAt     DateTime?
+}
+
+enum RentStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+model Command {
+  id         String   @id @default(cuid())
+  commandId  String   @unique
+  terminalId String
+  terminal   Terminal @relation(fields: [terminalId], references: [id])
+  cellId     String
+  cell       Cell     @relation(fields: [cellId], references: [id])
+  rentId     String?
+  userId     String?
+  itemId     String?
+  action     CommandAction @default(ACTIVE)
+  status     String   @default("pending")
+  createdAt  DateTime @default(now())
+  finishedAt DateTime? 
+}
+
+enum CommandAction {
+  ACTIVE
+  COMPLETED
+}

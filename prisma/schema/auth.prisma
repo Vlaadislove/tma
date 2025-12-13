@@ -1,0 +1,24 @@
+model User {
+  id                 Int                 @id @default(autoincrement())
+  phone              String              @unique
+  tgId               BigInt              @unique
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  phoneVerified      Boolean             @default(false)
+  phoneVerifications PhoneVerification[] // Связь с несколькими верификациями
+}
+
+model PhoneVerification {
+  id                  Int      @id @default(autoincrement())
+  phoneNumber         String   // Номер клиента (clientNumber)
+  confirmationNumber  String   // Номер на который звонить для подтверждения
+  callId              String   // ID от Ucaller (для webhook)
+  sessionToken        String   @unique @default(uuid()) // Публичный токен для клиента
+  tgId                BigInt   // Telegram ID, полученный на этапе login
+  createdAt           DateTime @default(now()) // Время звонка
+  expiresAt           DateTime
+  isVerified          Boolean  @default(false) // Флаг успешной верификации
+  tokensIssued        Boolean  @default(false) // Выданы ли токены (чтобы не повторять)
+  userId              Int?     // Nullable — юзер создаётся после верификации
+  user                User?    @relation(fields: [userId], references: [id])
+}

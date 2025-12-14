@@ -26,6 +26,7 @@
   COPY --from=builder /app/dist ./dist
   COPY --from=builder /app/prisma ./prisma
   COPY package*.json ./
+  COPY --from=builder /app/prisma.config.ts ./
   
   EXPOSE 3000
   

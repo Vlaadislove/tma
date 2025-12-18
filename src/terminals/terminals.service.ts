@@ -148,6 +148,49 @@ export class TerminalsService {
     };
   }
 
+  async getTerminalItems(terminalId: string) {
+    const conn = this.findById(terminalId);
+    if (!conn) {
+      throw new NotFoundException(
+        `Terminal ${terminalId} is offline or unknown`,
+      );
+    }
+
+    const db = await this.prisma.terminal.findUnique({
+      where: { id: terminalId },
+      include: {
+        cells: {
+          include: {
+            item: true,
+            currentRent: {
+              include: {
+                item: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!db) {
+      return [];
+    }
+
+    return db.cells
+      .filter((cell) => cell.item !== null)
+      .map((cell) => ({
+        id: cell.item!.id,
+        name: cell.item!.name,
+        sku: cell.item!.sku,
+        cellId: cell.id,
+        cellIndex: cell.index,
+        cellLabel: cell.label,
+        status: cell.status,
+        isRented: cell.status === 'OCCUPIED',
+        createdAt: cell.item!.createdAt.toISOString(),
+      }));
+  }
+
   async listUserRents(userId: number) {
     const rents = await this.prisma.rent.findMany({
       where: { userId: userId.toString(), status: 'ACTIVE' },
@@ -200,7 +243,8 @@ export class TerminalsService {
         durationSeconds,
       },
     };
-
+    console.log('sendGpioCommand', envelope);
+    console.log('conn.socket.readyState', conn.socket);
     conn.socket.send(JSON.stringify(envelope));
     return { commandId };
   }

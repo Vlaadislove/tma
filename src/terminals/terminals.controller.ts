@@ -46,6 +46,15 @@ export class TerminalsController {
     return this.terminalsService.getState(terminalId.trim());
   }
 
+  @Get(':terminalId/items')
+  @UseGuards(AutoRefreshGuard)
+  getTerminalItems(@Param('terminalId') terminalId: string) {
+    if (!terminalId?.trim()) {
+      throw new NotFoundException('Terminal id is required');
+    }
+    return this.terminalsService.getTerminalItems(terminalId.trim());
+  }
+
 
   @Post(':terminalId/cells/:cellId/start')
   @UseGuards(AutoRefreshGuard)
@@ -73,6 +82,7 @@ export class TerminalsController {
       throw new NotFoundException('Terminal id is required');
     }
     const user = req.user;
+    console.log('finishRent', terminalId.trim(), cellId.trim(), user.id);
     return this.terminalsService.finishRent(terminalId.trim(), cellId.trim(), user.id);
   }
 }

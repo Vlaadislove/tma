@@ -55,6 +55,10 @@ export class TerminalsGateway
       client.close(1008, 'terminalId is not registered');
       return;
     }
+
+    this.logger.debug(`Terminal connection attempt: code=${code}, providedId=${id}, expectedId=${terminal.id}`);
+
+
     if (id && terminal.id !== id) {
       this.logger.warn(`Terminal id mismatch for code ${code}`);
       client.close(1008, 'terminal id mismatch');

@@ -1001,6 +1001,8 @@ export const TerminalScalarFieldEnum = {
   name: 'name',
   code: 'code',
   location: 'location',
+  lon: 'lon',
+  lat: 'lat',
   createdAt: 'createdAt'
 } as const
 
@@ -1157,6 +1159,20 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
  * Reference to a field of type 'CellStatus'
  */
 export type EnumCellStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CellStatus'>
@@ -1195,20 +1211,6 @@ export type EnumCommandActionFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'CommandAction[]'
  */
 export type ListEnumCommandActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CommandAction[]'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**

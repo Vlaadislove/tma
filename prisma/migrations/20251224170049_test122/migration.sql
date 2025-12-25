@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Terminal" ADD COLUMN     "lat" DOUBLE PRECISION,
+ADD COLUMN     "lon" DOUBLE PRECISION;

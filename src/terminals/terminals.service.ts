@@ -27,7 +27,20 @@ export type TerminalInfo = {
 
   lastPayload?: TerminalStatePayload;
   lastEnvelope?: unknown;
-  cells?: unknown;
+  cells?: Array<{
+    id: string;
+    index: number;
+    gpioPin: number;
+    label: string | null;
+    status: string;
+    isActive: boolean;
+    item: {
+      id: string;
+      name: string;
+      sku: string | null;
+      createdAt: string;
+    } | null;
+  }>;
 };
 
 type Connection = {
@@ -99,20 +112,22 @@ export class TerminalsService {
     connection.lastEnvelope = envelope;
   }
 
-  async listOnline(): Promise<Array<{ terminalId: string; location: string, name: string }>> {
+  async listOnline(): Promise<Array<{ terminalId: string; location: string, name: string, lon: number, lat: number }>> {
     const ids = Array.from(this.connectionsByCode.values()).map((c) => c.dbId);
     if (ids.length === 0) {
       return [];
     }
     const terminals = await this.prisma.terminal.findMany({
       where: { id: { in: ids } },
-      select: { id: true, location: true, name: true },
+      select: { id: true, location: true, name: true, lon: true, lat: true },
     });
 
     return terminals.map((t) => ({
       terminalId: t.id,
       location: t.location ?? '',
       name: t.name ?? '',
+      lon: t.lon ?? 0,
+      lat: t.lat ?? 0,
     }));
   }
 
@@ -126,13 +141,22 @@ export class TerminalsService {
 
     const db = await this.prisma.terminal.findUnique({
       where: { id: terminalId },
-      include: { cells: true },
+      include: {
+        cells: {
+          include: {
+            item: true,
+          },
+        },
+      },
     });
 
+    if (!db?.id) {
+      throw new NotFoundException(
+        `Terminal ${terminalId} not found in DB`,
+      );
+    }
     return {
-      terminalId: conn.dbId,
-      terminalCode: conn.code,
-      terminalDbId: db?.id,
+      terminalId: db.id,
       terminalName: db?.name,
       location: db?.location,
 
@@ -144,6 +168,12 @@ export class TerminalsService {
           label: cell.label,
           status: cell.status,
           isActive: cell.isActive,
+          item: cell.item ? {
+            id: cell.item.id,
+            name: cell.item.name,
+            sku: cell.item.sku,
+            createdAt: cell.item.createdAt.toISOString(),
+          } : null,
         })) ?? [],
     };
   }
@@ -243,8 +273,7 @@ export class TerminalsService {
         durationSeconds,
       },
     };
-    console.log('sendGpioCommand', envelope);
-    console.log('conn.socket.readyState', conn.socket);
+
     conn.socket.send(JSON.stringify(envelope));
     return { commandId };
   }
@@ -293,7 +322,7 @@ export class TerminalsService {
     return this.sendGpioCommand(terminalId, {
       commandId,
       gpioPin: cell.gpioPin,
-      durationSeconds: 5,
+      durationSeconds: 2,
     });
   }
 
@@ -348,7 +377,7 @@ export class TerminalsService {
     return this.sendGpioCommand(terminalId, {
       commandId,
       gpioPin: cell.gpioPin,
-      durationSeconds: 5,
+      durationSeconds: 2,
     });
   }
 

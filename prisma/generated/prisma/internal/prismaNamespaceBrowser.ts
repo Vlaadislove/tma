@@ -110,6 +110,8 @@ export const TerminalScalarFieldEnum = {
   name: 'name',
   code: 'code',
   location: 'location',
+  lon: 'lon',
+  lat: 'lat',
   createdAt: 'createdAt'
 } as const
 

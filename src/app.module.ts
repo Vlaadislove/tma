@@ -4,6 +4,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { TerminalsModule } from './terminals/terminals.module';
 
+
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),

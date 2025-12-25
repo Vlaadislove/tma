@@ -20,8 +20,20 @@ export type TerminalModel = runtime.Types.Result.DefaultSelection<Prisma.$Termin
 
 export type AggregateTerminal = {
   _count: TerminalCountAggregateOutputType | null
+  _avg: TerminalAvgAggregateOutputType | null
+  _sum: TerminalSumAggregateOutputType | null
   _min: TerminalMinAggregateOutputType | null
   _max: TerminalMaxAggregateOutputType | null
+}
+
+export type TerminalAvgAggregateOutputType = {
+  lon: number | null
+  lat: number | null
+}
+
+export type TerminalSumAggregateOutputType = {
+  lon: number | null
+  lat: number | null
 }
 
 export type TerminalMinAggregateOutputType = {
@@ -29,6 +41,8 @@ export type TerminalMinAggregateOutputType = {
   name: string | null
   code: string | null
   location: string | null
+  lon: number | null
+  lat: number | null
   createdAt: Date | null
 }
 
@@ -37,6 +51,8 @@ export type TerminalMaxAggregateOutputType = {
   name: string | null
   code: string | null
   location: string | null
+  lon: number | null
+  lat: number | null
   createdAt: Date | null
 }
 
@@ -45,16 +61,30 @@ export type TerminalCountAggregateOutputType = {
   name: number
   code: number
   location: number
+  lon: number
+  lat: number
   createdAt: number
   _all: number
 }
 
+
+export type TerminalAvgAggregateInputType = {
+  lon?: true
+  lat?: true
+}
+
+export type TerminalSumAggregateInputType = {
+  lon?: true
+  lat?: true
+}
 
 export type TerminalMinAggregateInputType = {
   id?: true
   name?: true
   code?: true
   location?: true
+  lon?: true
+  lat?: true
   createdAt?: true
 }
 
@@ -63,6 +93,8 @@ export type TerminalMaxAggregateInputType = {
   name?: true
   code?: true
   location?: true
+  lon?: true
+  lat?: true
   createdAt?: true
 }
 
@@ -71,6 +103,8 @@ export type TerminalCountAggregateInputType = {
   name?: true
   code?: true
   location?: true
+  lon?: true
+  lat?: true
   createdAt?: true
   _all?: true
 }
@@ -113,6 +147,18 @@ export type TerminalAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: TerminalAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: TerminalSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: TerminalMinAggregateInputType
@@ -143,6 +189,8 @@ export type TerminalGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   _count?: TerminalCountAggregateInputType | true
+  _avg?: TerminalAvgAggregateInputType
+  _sum?: TerminalSumAggregateInputType
   _min?: TerminalMinAggregateInputType
   _max?: TerminalMaxAggregateInputType
 }
@@ -152,8 +200,12 @@ export type TerminalGroupByOutputType = {
   name: string
   code: string
   location: string | null
+  lon: number | null
+  lat: number | null
   createdAt: Date
   _count: TerminalCountAggregateOutputType | null
+  _avg: TerminalAvgAggregateOutputType | null
+  _sum: TerminalSumAggregateOutputType | null
   _min: TerminalMinAggregateOutputType | null
   _max: TerminalMaxAggregateOutputType | null
 }
@@ -181,6 +233,8 @@ export type TerminalWhereInput = {
   name?: Prisma.StringFilter<"Terminal"> | string
   code?: Prisma.StringFilter<"Terminal"> | string
   location?: Prisma.StringNullableFilter<"Terminal"> | string | null
+  lon?: Prisma.FloatNullableFilter<"Terminal"> | number | null
+  lat?: Prisma.FloatNullableFilter<"Terminal"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Terminal"> | Date | string
   cells?: Prisma.CellListRelationFilter
   commands?: Prisma.CommandListRelationFilter
@@ -191,6 +245,8 @@ export type TerminalOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
+  lon?: Prisma.SortOrderInput | Prisma.SortOrder
+  lat?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   cells?: Prisma.CellOrderByRelationAggregateInput
   commands?: Prisma.CommandOrderByRelationAggregateInput
@@ -204,6 +260,8 @@ export type TerminalWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.TerminalWhereInput | Prisma.TerminalWhereInput[]
   name?: Prisma.StringFilter<"Terminal"> | string
   location?: Prisma.StringNullableFilter<"Terminal"> | string | null
+  lon?: Prisma.FloatNullableFilter<"Terminal"> | number | null
+  lat?: Prisma.FloatNullableFilter<"Terminal"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Terminal"> | Date | string
   cells?: Prisma.CellListRelationFilter
   commands?: Prisma.CommandListRelationFilter
@@ -214,10 +272,14 @@ export type TerminalOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
+  lon?: Prisma.SortOrderInput | Prisma.SortOrder
+  lat?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TerminalCountOrderByAggregateInput
+  _avg?: Prisma.TerminalAvgOrderByAggregateInput
   _max?: Prisma.TerminalMaxOrderByAggregateInput
   _min?: Prisma.TerminalMinOrderByAggregateInput
+  _sum?: Prisma.TerminalSumOrderByAggregateInput
 }
 
 export type TerminalScalarWhereWithAggregatesInput = {
@@ -228,6 +290,8 @@ export type TerminalScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Terminal"> | string
   code?: Prisma.StringWithAggregatesFilter<"Terminal"> | string
   location?: Prisma.StringNullableWithAggregatesFilter<"Terminal"> | string | null
+  lon?: Prisma.FloatNullableWithAggregatesFilter<"Terminal"> | number | null
+  lat?: Prisma.FloatNullableWithAggregatesFilter<"Terminal"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Terminal"> | Date | string
 }
 
@@ -236,6 +300,8 @@ export type TerminalCreateInput = {
   name: string
   code: string
   location?: string | null
+  lon?: number | null
+  lat?: number | null
   createdAt?: Date | string
   cells?: Prisma.CellCreateNestedManyWithoutTerminalInput
   commands?: Prisma.CommandCreateNestedManyWithoutTerminalInput
@@ -246,6 +312,8 @@ export type TerminalUncheckedCreateInput = {
   name: string
   code: string
   location?: string | null
+  lon?: number | null
+  lat?: number | null
   createdAt?: Date | string
   cells?: Prisma.CellUncheckedCreateNestedManyWithoutTerminalInput
   commands?: Prisma.CommandUncheckedCreateNestedManyWithoutTerminalInput
@@ -256,6 +324,8 @@ export type TerminalUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lon?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lat?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cells?: Prisma.CellUpdateManyWithoutTerminalNestedInput
   commands?: Prisma.CommandUpdateManyWithoutTerminalNestedInput
@@ -266,6 +336,8 @@ export type TerminalUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lon?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lat?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cells?: Prisma.CellUncheckedUpdateManyWithoutTerminalNestedInput
   commands?: Prisma.CommandUncheckedUpdateManyWithoutTerminalNestedInput
@@ -276,6 +348,8 @@ export type TerminalCreateManyInput = {
   name: string
   code: string
   location?: string | null
+  lon?: number | null
+  lat?: number | null
   createdAt?: Date | string
 }
 
@@ -284,6 +358,8 @@ export type TerminalUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lon?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lat?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -292,6 +368,8 @@ export type TerminalUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lon?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lat?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -300,7 +378,14 @@ export type TerminalCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  lon?: Prisma.SortOrder
+  lat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type TerminalAvgOrderByAggregateInput = {
+  lon?: Prisma.SortOrder
+  lat?: Prisma.SortOrder
 }
 
 export type TerminalMaxOrderByAggregateInput = {
@@ -308,6 +393,8 @@ export type TerminalMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  lon?: Prisma.SortOrder
+  lat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -316,7 +403,14 @@ export type TerminalMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  lon?: Prisma.SortOrder
+  lat?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type TerminalSumOrderByAggregateInput = {
+  lon?: Prisma.SortOrder
+  lat?: Prisma.SortOrder
 }
 
 export type TerminalScalarRelationFilter = {
@@ -326,6 +420,14 @@ export type TerminalScalarRelationFilter = {
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type TerminalCreateNestedOneWithoutCellsInput = {
@@ -361,6 +463,8 @@ export type TerminalCreateWithoutCellsInput = {
   name: string
   code: string
   location?: string | null
+  lon?: number | null
+  lat?: number | null
   createdAt?: Date | string
   commands?: Prisma.CommandCreateNestedManyWithoutTerminalInput
 }
@@ -370,6 +474,8 @@ export type TerminalUncheckedCreateWithoutCellsInput = {
   name: string
   code: string
   location?: string | null
+  lon?: number | null
+  lat?: number | null
   createdAt?: Date | string
   commands?: Prisma.CommandUncheckedCreateNestedManyWithoutTerminalInput
 }
@@ -395,6 +501,8 @@ export type TerminalUpdateWithoutCellsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lon?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lat?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   commands?: Prisma.CommandUpdateManyWithoutTerminalNestedInput
 }
@@ -404,6 +512,8 @@ export type TerminalUncheckedUpdateWithoutCellsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lon?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lat?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   commands?: Prisma.CommandUncheckedUpdateManyWithoutTerminalNestedInput
 }
@@ -413,6 +523,8 @@ export type TerminalCreateWithoutCommandsInput = {
   name: string
   code: string
   location?: string | null
+  lon?: number | null
+  lat?: number | null
   createdAt?: Date | string
   cells?: Prisma.CellCreateNestedManyWithoutTerminalInput
 }
@@ -422,6 +534,8 @@ export type TerminalUncheckedCreateWithoutCommandsInput = {
   name: string
   code: string
   location?: string | null
+  lon?: number | null
+  lat?: number | null
   createdAt?: Date | string
   cells?: Prisma.CellUncheckedCreateNestedManyWithoutTerminalInput
 }
@@ -447,6 +561,8 @@ export type TerminalUpdateWithoutCommandsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lon?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lat?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cells?: Prisma.CellUpdateManyWithoutTerminalNestedInput
 }
@@ -456,6 +572,8 @@ export type TerminalUncheckedUpdateWithoutCommandsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lon?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  lat?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cells?: Prisma.CellUncheckedUpdateManyWithoutTerminalNestedInput
 }
@@ -505,6 +623,8 @@ export type TerminalSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name?: boolean
   code?: boolean
   location?: boolean
+  lon?: boolean
+  lat?: boolean
   createdAt?: boolean
   cells?: boolean | Prisma.Terminal$cellsArgs<ExtArgs>
   commands?: boolean | Prisma.Terminal$commandsArgs<ExtArgs>
@@ -516,6 +636,8 @@ export type TerminalSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   code?: boolean
   location?: boolean
+  lon?: boolean
+  lat?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["terminal"]>
 
@@ -524,6 +646,8 @@ export type TerminalSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   code?: boolean
   location?: boolean
+  lon?: boolean
+  lat?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["terminal"]>
 
@@ -532,10 +656,12 @@ export type TerminalSelectScalar = {
   name?: boolean
   code?: boolean
   location?: boolean
+  lon?: boolean
+  lat?: boolean
   createdAt?: boolean
 }
 
-export type TerminalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "code" | "location" | "createdAt", ExtArgs["result"]["terminal"]>
+export type TerminalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "code" | "location" | "lon" | "lat" | "createdAt", ExtArgs["result"]["terminal"]>
 export type TerminalInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cells?: boolean | Prisma.Terminal$cellsArgs<ExtArgs>
   commands?: boolean | Prisma.Terminal$commandsArgs<ExtArgs>
@@ -555,6 +681,8 @@ export type $TerminalPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     name: string
     code: string
     location: string | null
+    lon: number | null
+    lat: number | null
     createdAt: Date
   }, ExtArgs["result"]["terminal"]>
   composites: {}
@@ -985,6 +1113,8 @@ export interface TerminalFieldRefs {
   readonly name: Prisma.FieldRef<"Terminal", 'String'>
   readonly code: Prisma.FieldRef<"Terminal", 'String'>
   readonly location: Prisma.FieldRef<"Terminal", 'String'>
+  readonly lon: Prisma.FieldRef<"Terminal", 'Float'>
+  readonly lat: Prisma.FieldRef<"Terminal", 'Float'>
   readonly createdAt: Prisma.FieldRef<"Terminal", 'DateTime'>
 }
     
